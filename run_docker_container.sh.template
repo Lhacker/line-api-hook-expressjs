@@ -1,0 +1,30 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(cd $(dirname $0); pwd)
+
+function usage() {
+  echo 'Usage:'
+  echo "  $0 [image tag version=master]"
+  exit 1
+}
+
+TAG_VERSION=${1:-master}
+EXPRESS_APP_NAME=line-api-hook
+EXPRESS_ROOT=/app-root
+EXPRESS_APP_DIR=${EXPRESS_ROOT}/${EXPRESS_APP_NAME}
+
+HOST_EXPRESS_APP_DIR=${SCRIPT_DIR}/${EXPRESS_APP_NAME}
+
+docker run -itd \
+  --name line-api-hook-expressjs \
+  --hostname line-api-hook-expressjs \
+  -v "${HOST_EXPRESS_APP_DIR}/app.js:${EXPRESS_APP_DIR}/app.js" \
+  -v "${HOST_EXPRESS_APP_DIR}/bin:${EXPRESS_APP_DIR}/bin" \
+  -v "${HOST_EXPRESS_APP_DIR}/public:${EXPRESS_APP_DIR}/public" \
+  -v "${HOST_EXPRESS_APP_DIR}/routes:${EXPRESS_APP_DIR}/routes" \
+  -v "${HOST_EXPRESS_APP_DIR}/sslcert:${EXPRESS_APP_DIR}/sslcert" \
+  -v "${HOST_EXPRESS_APP_DIR}/views:${EXPRESS_APP_DIR}/views" \
+  -p "443:443" \
+  -e <Your Line API name>_LINE_CHANNEL_SECRET_KEY='XXXXXXXXXXXXXXXX' \
+  -e <Your Line API name>_LINE_CHANNEL_ACCESS_TOKEN='YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY' \
+  line-api-hook/centos7-expressjs:${TAG_VERSION}
