@@ -10,5 +10,6 @@ function usage() {
 }
 
 CONTAINER_NAME=line-api-hook-expressjs
-docker stop ${CONTAINER_NAME}
-docker start ${CONTAINER_NAME}
+
+docker rm -f ${CONTAINER_NAME}
+${SCRIPT_DIR}/run_docker_container.sh
