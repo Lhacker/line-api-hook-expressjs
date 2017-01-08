@@ -4,11 +4,12 @@ SCRIPT_DIR=$(cd $(dirname $0); pwd)
 
 function usage() {
   echo 'Usage:'
-  echo "  $0 [image tag version=master]"
+  echo "  $0 [image tag version=master] [environment=production]"
   exit 1
 }
 
 TAG_VERSION=${1:-master}
+NODE_ENV=${2:-production}
 EXPRESS_APP_NAME=line-api-hook
 EXPRESS_ROOT=/app-root
 EXPRESS_APP_DIR=${EXPRESS_ROOT}/${EXPRESS_APP_NAME}
@@ -25,6 +26,7 @@ docker run -itd \
   -v "${HOST_EXPRESS_APP_DIR}/sslcert:${EXPRESS_APP_DIR}/sslcert" \
   -v "${HOST_EXPRESS_APP_DIR}/views:${EXPRESS_APP_DIR}/views" \
   -p "443:443" \
+  -e NODE_ENV=${NODE_ENV} \
   -e <Your Line API name>_LINE_CHANNEL_SECRET_KEY='XXXXXXXXXXXXXXXX' \
   -e <Your Line API name>_LINE_CHANNEL_ACCESS_TOKEN='YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY' \
   line-api-hook/centos7-expressjs:${TAG_VERSION}
