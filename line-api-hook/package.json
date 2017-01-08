@@ -12,7 +12,8 @@
     "express": "~4.14.0",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.0",
-    "vash": "~0.12.2"
+    "vash": "~0.12.2",
+    "xml2js": "^0.4.17"
   },
   "license": "MIT"
 }

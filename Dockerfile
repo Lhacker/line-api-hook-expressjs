@@ -21,7 +21,9 @@ RUN set -x && \
   cd ${EXPRESS_APP_DIR} && \
   sed -i 's/^  }$/  },/g' package.json && \
   sed -i '/^}$/i\  "license": "MIT"' package.json && \
-  npm install
+  npm install && \
+: 'install extra packages' && \
+  npm install xml2js --save
 
 WORKDIR ${EXPRESS_APP_DIR}
 
