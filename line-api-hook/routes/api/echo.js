@@ -16,7 +16,7 @@
 
       try {
         if (!WebhookRequest.isValid(req, CHANNEL_SECRET_KEY)) {
-          console.log('Bad request :' +
+          console.error('Bad request :' +
                       'Requested header : ' + JSON.stringify(req.headers) + "\n" +
                       'Requested data : ' + JSON.stringify(req.body));
           return next();
@@ -42,7 +42,7 @@
         }
 
       } catch(e) {
-        console.log('Internal Server Error :' +
+        console.error('Internal Server Error :' +
                     'Requested header : ' + JSON.stringify(req.headers) + "\n" +
                     'Requested data : ' + JSON.stringify(req.body) + "\n" +
                     e);
