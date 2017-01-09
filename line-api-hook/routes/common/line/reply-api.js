@@ -14,11 +14,15 @@
   replyAPI.prototype.sendReplyAsync = function(replyToken, messages) {
     const postRequest = https.request(this.replyApiConfig.postOption, function(res) {
       res.setEncoding('utf8');
-      res.on('data', function(chunk) { console.log('Posting chunk to LINE Reply API : ' + chunk); });
+      res.on('data', function(chunk) {
+        // Basically LINE reply API will return {},
+        // so if we got response data, the data should be error message
+        console.error('Response from LINE Reply API : ' + chunk);
+      });
     });
 
     postRequest.on('error', function(error) {
-      console.log(error);
+      console.error(error);
     });
 
     const sendData = {
