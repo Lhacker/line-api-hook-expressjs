@@ -16,16 +16,16 @@
 
       try {
         if (!WebhookRequest.isValid(req, CHANNEL_SECRET_KEY)) {
-          console.log('Bad request :' +
-                      'Requested header : ' + JSON.stringify(req.headers) + "\n" +
-                      'Requested data : ' + JSON.stringify(req.body));
+          console.error("Bad request : \n" +
+                        'Requested header : ' + JSON.stringify(req.headers) + "\n" +
+                        'Requested data : ' + JSON.stringify(req.body));
           return next();
         }
 
         for (let i = 0, l = req.body.events.length; i < l; i++) {
           let webhookRequest = new WebhookRequest(req.body.events[i]);
 
-          if (!webhookRequest.type.match(`${WebhookRequest.CONSTANT.EVENT_TYPE.MESSAGE}`)) {
+          if (!webhookRequest.isTextMessage()) {
             continue;
           }
 
@@ -33,19 +33,19 @@
           var messages = [
             {
               "type": "text",
-              "text": webhookRequest.message.text
+              "text": webhookRequest.getTextMessage()
             }
           ];
 
           let lineReply = new LineReply(CHANNEL_ACCESS_TOKEN);
-          lineReply.sendReplyAsync(webhookRequest.replyToken, messages);
+          lineReply.sendReplyAsync(webhookRequest.getReplyToken(), messages);
         }
 
       } catch(e) {
-        console.log('Internal Server Error :' +
-                    'Requested header : ' + JSON.stringify(req.headers) + "\n" +
-                    'Requested data : ' + JSON.stringify(req.body) + "\n" +
-                    e);
+        console.error("Internal Server Error : \n" +
+                      'Requested header : ' + JSON.stringify(req.headers) + "\n" +
+                      'Requested data : ' + JSON.stringify(req.body) + "\n" +
+                      e);
       }
     });
 
