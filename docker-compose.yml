@@ -1,0 +1,33 @@
+version: '2.0'
+services:
+  line_api:
+    build:
+      context: ./dockerfile/mainapp
+      args:
+        EXPRESS_VERSION: ${EXPRESS_VERSION}
+        EXPRESS_ROOT: ${EXPRESS_ROOT}
+        EXPRESS_APP_NAME: ${EXPRESS_APP_NAME}
+    image: line-api-hook/centos7-expressjs:${LINEAPI_IMAGE_TAG}
+    container_name: line-api-hook-app
+    ports:
+      - "19443:443"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+    env_file:
+      - secret.env
+    volumes:
+      - ./${EXPRESS_APP_NAME}/app.js:${EXPRESS_ROOT}/${EXPRESS_APP_NAME}/app.js
+      - ./${EXPRESS_APP_NAME}/bin:${EXPRESS_ROOT}/${EXPRESS_APP_NAME}/bin
+      - ./${EXPRESS_APP_NAME}/public:${EXPRESS_ROOT}/${EXPRESS_APP_NAME}/public
+      - ./${EXPRESS_APP_NAME}/routes:${EXPRESS_ROOT}/${EXPRESS_APP_NAME}/routes
+      - ./${EXPRESS_APP_NAME}/sslcert:${EXPRESS_ROOT}/${EXPRESS_APP_NAME}/sslcert
+      - ./${EXPRESS_APP_NAME}/views:${EXPRESS_ROOT}/${EXPRESS_APP_NAME}/views
+    command: npm start
+  redis:
+    build:
+      context: ./dockerfile/redis
+      args:
+        REDIS_VERSION: 3.2.6
+    image: line-api-hook/centos7-redis:master
+    container_name: line-api-hook-redis
+    command: redis-server /etc/redis/redis.conf
