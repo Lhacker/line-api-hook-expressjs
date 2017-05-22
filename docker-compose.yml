@@ -2,13 +2,15 @@ version: '2.0'
 services:
   line-api:
     build:
-      context: ./dockerfile/mainapp
+      context: ./dockerfile/line-api
       args:
         EXPRESS_VERSION: ${EXPRESS_VERSION}
         EXPRESS_ROOT: ${EXPRESS_ROOT}
         EXPRESS_APP_NAME: ${EXPRESS_APP_NAME}
     image: line-api-hook/centos7-expressjs:${LINEAPI_IMAGE_TAG}
     container_name: line-api-hook-app
+    links:
+      - redis
     ports:
       - "19443:443"
     environment:

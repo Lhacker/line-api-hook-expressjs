@@ -23,7 +23,7 @@ RUN set -x && \
   sed -i '/^}$/i\  "license": "MIT"' package.json && \
   npm install && \
 : 'install extra packages' && \
-  npm install xml2js --save
+  npm install xml2js redis bluebird --save
 
 WORKDIR ${EXPRESS_APP_DIR}
 
